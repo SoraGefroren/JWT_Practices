@@ -1,0 +1,17 @@
+DEPENDENCIAS
+> pip install Django
+> pip install python-decouple
+> pip install djangorestframework
+> pip install djangorestframework-jwt
+
+
+INICIALIZACIÓN
+> python -m django startproject myBackEnd
+
+
+START DJANGO
+> python manage.py runserver
+> python manage.py runserver 127.0.0.1:9000
+
+python manage.py makemigrations
+python manage.py migrate
