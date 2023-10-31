@@ -1,0 +1,55 @@
+
+
+<main class="w-100 p-3">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex flex-column p-0">
+                
+                <form class="container-fluid"
+                      [formGroup]="formLgn"
+                      (ngSubmit)="onSubmitLogin()">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="ctrl_text_to_speech" class="form-label">
+                                {{ trans.get('user') }}
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text material-icons-sharp">
+                                    person
+                                </span>
+                                <input placeholder="{{ trans.get('user') }}"
+                                       type="text" class="form-control" autofocus
+                                       name="username" formControlName="username" required>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="ctrl_text_to_speech" class="form-label">
+                                {{ trans.get('password') }}
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text material-icons-sharp">
+                                    password
+                                </span>
+                                <input placeholder="{{ trans.get('password') }}"
+                                       type="password" class="form-control"
+                                       name="password" formControlName="password" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-dark">
+                                <div class="d-flex align-items-center">
+                                    <span class="material-icons-sharp me-2">
+                                        login
+                                    </span>
+                                    {{ trans.get('login') }}
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,11 @@
+{
+    "/laravel/*": {
+        "pathRewrite": {
+            "^/laravel" : ""
+        },
+        "changeOrigin": true,
+        "target": "http://localhost:8000",
+        "logLevel": "debug",
+        "secure": false
+    }
+}

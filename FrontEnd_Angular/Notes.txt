@@ -1,0 +1,12 @@
+> ng serve
+
+* Crear app/components/nombre-elemento/nombre-elemento.component.[html,scss,spec.ts,ts]
+> ng generate component ./components/Nombre-Elemento
+
+* Otros metodos
+> ng generate component ./common/components/component-name
+> ng generate service ./common/services/service-name
+> ng generate module ./common/modules/module-name
+
+> ng generate class /common/models/model-name --type=model
+> ng generate interface /common/models/model-name --type=model

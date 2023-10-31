@@ -1,0 +1,135 @@
+<ng-template #listMenusTemplate>
+    <li class="nav-item" *ngFor="let itemMenu of listMenus">
+        <a class="nav-link"
+        [href]="itemMenu.link"
+        [class.active]="isCurrentPage(itemMenu.link)"
+        [attr.aria-current]="isCurrentPage(itemMenu.link) ? 'page' : null"
+        *ngIf="itemMenu.status !== 'disabled'; else disabledLinkTemplate">
+            {{ itemMenu.name }}
+            <div class="internal-nav-link-text w-100"></div>
+        </a>
+        <ng-template #disabledLinkTemplate>
+        <a class="nav-link disabled"
+            [attr.tabindex]="-1"
+            [href]="itemMenu.link"
+            [attr.aria-disabled]="true">
+            {{ itemMenu.name }}
+            <div class="internal-nav-link-text w-100"></div>
+        </a>
+        </ng-template>
+    </li>
+</ng-template>
+
+<nav class="align-items-start navbar navbar-dark bg-dark fixed-top h-100"
+     [ngClass]="onMobileScreen? 
+                                !viewMobileMenu? 'mobile-collapse-menu':
+                                                 'mobile-expand-menu':
+                  collapseMenu? 'desktop-collapse-menu':
+                                'desktop-expand-menu'">
+    <div class="d-flex flex-column w-100">
+        <a class="navbar-brand text-center" href="/">
+            {{ env.APP_Name }}
+            <span class="material-icons-sharp">
+                category
+            </span>
+        </a>
+        <ul class="nav flex-column w-100">
+            <ng-container *ngTemplateOutlet="listMenusTemplate">
+            </ng-container>
+        </ul>
+        <div class="navbar-brand">
+            <a class="text-decoration-none" href="#"
+                (click)="actionClick_LogOut()">
+                <div class="d-flex align-items-center justify-content-center">
+                    <span class="material-icons-sharp me-2">
+                        logout
+                    </span>
+                    {{ trans.get('logOut') }}
+                </div>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="background-panel-style"
+     (click)="actionClick_OpenMobileMenu()"
+     [ngClass]="!(onMobileScreen && viewMobileMenu)?
+        'background-panel-menu-hidden':
+        'background-panel-menu-shown'">
+</div>
+
+<nav [ngClass]="onMobileScreen? 'full-bar': collapseMenu? 'expand-bar': 'collapse-bar'"
+     class="navbar navbar-dark bg-dark fixed-top d-flex flex-column">
+    <div class="container-fluid">
+        <ul class="nav justify-content-start">
+            <li class="nav-item"
+                id="item_arrow_button">
+                <button class="navbar-toggler nav-link"
+                   (click)="actionClick_CollapseMenu()">
+                   <span class="material-icons-sharp">
+                        keyboard_double_arrow_left
+                    </span>
+                    <span class="material-icons-sharp">
+                        keyboard_double_arrow_right
+                    </span>
+                </button>
+            </li>
+            <li class="nav-item"
+                id="item_left_button">
+                <button class="navbar-toggler" type="button"
+                        (click)="actionClick_OpenMobileMenu()">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+            </li>
+        </ul>
+        <ul class="nav justify-content-end">
+            <li class="nav-item">
+                <label class="nav-link">
+                    {{ userInfo? userInfo.strUserName: '' }}
+                </label>
+            </li>
+            <li class="nav-item">
+                <select class="form-select bg-dark navbar-text no-border"
+                        [(ngModel)]="selectedLang"
+                        (change)="onLanguageChange()">
+                    <option *ngFor="let lang of listLangs"
+                            [value]="lang.lang"
+                            class="bg-dark navbar-text">
+                        {{ lang.language }}
+                    </option>
+                </select>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main class="w-100" id="main_content"
+      [ngClass]="onMobileScreen? 'full-content': collapseMenu? 'expand-content': 'collapse-content'"
+      style="padding-top: 65px;
+             padding-right: 10px;
+             padding-bottom: 10px;">
+    <div class="card"
+         style="padding: 5px;">
+        <ng-content></ng-content>
+    </div>
+</main>
+
+<footer [ngClass]="onMobileScreen? 'full-bar': collapseMenu? 'expand-bar': 'collapse-bar'"
+        class="navbar navbar-dark bg-dark fixed-bottom"
+        id="footer_content">
+    <div class="container-fluid justify-content-center">
+        <p class="navbar-text">
+            {{ env.APP_Name }}
+            <a class="navbar-text text-decoration-none" rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/">
+                <i class="fa-brands fa-creative-commons">
+                </i>
+                &nbsp;
+                <i class="fa-brands fa-creative-commons-by">
+                </i>
+            </a>
+            Rev. 2022.04.24
+        </p>
+    </div>
+</footer>

@@ -1,0 +1,77 @@
+/* Panel de menú */
+.background-panel-menu-hidden
+    z-index: 0
+    flex: none
+    display: none
+    visibility: hidden
+
+.background-panel-menu-shown
+    z-index: 1000
+    display: flex
+    position: fixed
+
+/* Ancho del menú */
+.mobile-collapse-menu
+    visibility: hidden
+
+.mobile-expand-menu
+    width: 90%
+    z-index: 1050
+    max-width: 250px
+    min-width: 100px
+    visibility: visible
+    overflow-x: hidden
+    overflow-y: auto
+
+.desktop-collapse-menu
+    width: 100px
+    z-index: 1050
+    overflow-x: hidden
+    overflow-y: auto
+
+.desktop-expand-menu
+    width: 250px
+    z-index: 1050
+    overflow-x: hidden
+    overflow-y: auto
+
+/* Ancho del menú */
+.collapse-bar
+    padding-left: 250px
+
+.collapse-content
+    padding-left: 260px
+
+.expand-bar
+    padding-left: 100px
+
+.expand-content
+    padding-left: 110px
+
+
+.full-content
+    padding-left: 10px
+
+.mobile-menu
+    width: 80%
+    min-width: 200px
+    max-width: 350px
+    overflow-y: auto
+    overflow-x: hidden
+    border-radius: 0rem
+    border: 0rem solid rgba(0, 0, 0, 0)
+
+@media screen and (min-width: 740px)
+    #item_left_button
+        display: none
+
+@media not screen and (min-width: 740px)
+    #item_arrow_button
+        display: none
+
+.nav-link.active
+    font-weight: bold
+
+.nav-link.active > .internal-nav-link-text
+    background: blue
+    height: 1px

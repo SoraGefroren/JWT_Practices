@@ -1,0 +1,37 @@
+<app-menu>
+  
+  <h1>
+    TRANSLATION FORM
+  </h1>
+  <div class="d-flex flex-column bg-light">
+      <form class="container-fluid">
+        <div class="row">
+          <div class="col-12 col-sm-8">
+              <label for="ctrl_select_voice" class="form-label">Voice</label>
+              <select id="ctrl_select_voice" class="form-select" aria-label=".form-select">
+                <option value="" disabled selected>Please, selected a voice</option>
+              </select>
+          </div>
+          <div class="col-12 col-sm-4">
+            <label for="ctrl_range_rate" class="form-label">Rate</label>
+            <input id="ctrl_range_rate" class="form-range" value="100" type="range" min="1" max="200">
+          </div>
+        </div>
+      
+        <div class="row justify-content-center">
+          <div class="col-3 col-sm-2 text-center">
+            <button id="ctrl_btn_play" class="btn btn-dark rounded-pill" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Play">
+              <i class="fa-solid fa-play"></i>
+            </button>
+          </div>
+          <div class="col-3 col-sm-2 text-center">
+            <button id="ctrl_btn_stop" class="btn btn-dark rounded-pill" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Stop" disabled>
+              <i class="fa-solid fa-square"></i>
+            </button>
+          </div>
+        </div>
+      </form>  
+      
+  </div>
+
+</app-menu>
