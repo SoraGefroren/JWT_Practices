@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.documentation import include_docs_urls
 
 """
 URL configuration for myBackEnd project.
@@ -19,6 +20,7 @@ Including another URLconf
 """
 
 urlpatterns = [
-    path('', include('app.routes.routes')),
+    path('', include('api.myRoutes.routes')),
     path('admin/', admin.site.urls),
+    path('docs/', include_docs_urls(title='Documentation'))
 ]

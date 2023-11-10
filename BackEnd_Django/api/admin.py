@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models.models import ItemMenu, Language, Translation, User, UserType, UserTypeHasItemMenu
+
+# Register your models here.
+from .models import ItemMenu, Language, Translation, User, UserType, UserTypeHasItemMenu
 
 admin.site.register(ItemMenu)
 admin.site.register(Language)

@@ -3,11 +3,19 @@ DEPENDENCIAS
 > pip install python-decouple
 > pip install djangorestframework
 > pip install djangorestframework-jwt
+> pip install coreapi
 
 
 INICIALIZACIÓN
-> python -m django startproject myBackEnd
+> python -m django startproject myProject   // En nueva carpeta
+> python -m django startproject myProject . // En carpeta raiz
 
+APLICACIONES (COMPONENTES)
+> python manage.py startapp myAplicacion
+
+DJANGO ADMIN
+> python manage.py createsuperuser
+    -   sa | sa | test rest
 
 START DJANGO
 > python manage.py runserver
@@ -15,3 +23,11 @@ START DJANGO
 
 python manage.py makemigrations
 python manage.py migrate
+
+
+
+
+ventanilla de control de presaciones o servicios tecnicos.
+* aqui agendo cita
+8am-2:00pm
+2;30pm-7:30pm
