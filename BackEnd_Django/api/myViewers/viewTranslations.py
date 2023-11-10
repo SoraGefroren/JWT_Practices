@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
 from rest_framework import serializers
-from myModels.translation import Translation
+from ..myModels.translation import Translation
 
 class Serialize (serializers.ModelSerializer):
     class Meta:

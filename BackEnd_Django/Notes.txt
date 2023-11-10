@@ -1,8 +1,9 @@
 DEPENDENCIAS
 > pip install Django
-> pip install python-decouple
 > pip install djangorestframework
-> pip install djangorestframework-jwt
+> pip install djangorestframework-simplejwt
+> pip install python-dotenv
+> pip install mysqlclient
 > pip install coreapi
 
 
@@ -23,11 +24,3 @@ START DJANGO
 
 python manage.py makemigrations
 python manage.py migrate
-
-
-
-
-ventanilla de control de presaciones o servicios tecnicos.
-* aqui agendo cita
-8am-2:00pm
-2;30pm-7:30pm
