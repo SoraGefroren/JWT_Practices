@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix("")->middleware(['web'])->group(function () {
     Route::post("login", App\Http\Controllers\Auth\Login::class);
     Route::post("registration", App\Http\Controllers\Auth\Registration::class);
-    // Protected routes
+    // Protected auth endpoints
     Route::middleware(["auth:api"])->group(function () {
         Route::post("logout", App\Http\Controllers\Auth\Logout::class);
         Route::get("me", App\Http\Controllers\Auth\Me::class);
