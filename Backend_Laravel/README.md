@@ -4,6 +4,7 @@ This project explain how to use Laravel and JWT to protect Rest API requests usi
 
 ## Installed packages
 - [tymon/jwt-auth](https://github.com/tymondesigns/jwt-auth)
+- [laraveles/spanish](https://github.com/Laraveles/spanish)
 
 ## Coding/developing requirements
 - Composer 2+

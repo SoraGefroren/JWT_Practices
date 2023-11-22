@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::prefix("")->middleware(['web'])->group(function(){
+    Route::get("languages",App\Http\Controllers\Languages\Show::class);
+    Route::post("languages/{lang}",App\Http\Controllers\Languages\Change::class);
+    Route::post("login",App\Http\Controllers\Auth\Login::class);
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
