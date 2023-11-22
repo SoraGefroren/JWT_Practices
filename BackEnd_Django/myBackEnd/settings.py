@@ -36,7 +36,7 @@ ALLOWED_HOSTS = [
 ]
 
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds= ((int)(os.getenv('TIME_LIMIT_ACCESS', default='1') + '') * 60)),
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
 
@@ -64,6 +64,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # 'api.myUtils.KeeperUtil',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

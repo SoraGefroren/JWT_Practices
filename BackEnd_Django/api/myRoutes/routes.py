@@ -1,16 +1,18 @@
-from rest_framework import routers
-from django.urls import path, include
-from ..myViewers import viewMain, viewTranslations
-
-myRouters = routers.DefaultRouter()
-
-myRouters.register(r'translations', viewTranslations.ViewSet)
+from django.urls import path
+from ..myViewers import viewFree, viewAuth
+from django.views.decorators.http import require_POST
 
 urlpatterns = [
-    path('', include(myRouters.urls)),
-    path('', viewMain.index, name='index'),
-    path('languages', viewMain.languages, name='languages'),
-    # url(r'^auth-jwt/', obtain_jwt_token),
-    # url(r'^auth-jwt-refresh/', refresh_jwt_token),
-    # url(r'^auth-jwt-verify/', verify_jwt_token),
+    path('', viewFree.index, name='index'),
+    path('languages', viewFree.languages, name='languages'),
+    path('translations', viewFree.translations, name='translations'),
+    path('translations/<str:language>', viewFree.translations, name='languages'),
+    # Ruta pára iniciar sesión y obtener un accessToken
+    path('login', require_POST(viewAuth.login), name='login'),
+    # Ruta para proteger y renovar el accessToken utilizando el refreshToken
+    path('refresh', require_POST(viewAuth.renewAccessToken), name='refresh'),
+    # Ruta para validar el refreshToken
+    path('verify-refresh', require_POST(viewAuth.verifyRefreshToken), name='verify-refresh'),
 ]
+
+
