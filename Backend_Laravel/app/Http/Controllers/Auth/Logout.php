@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Src\Auth\Infrastructure\LoginCommand;
+use App\Src\Auth\Infrastructure\LogoutCommand;
 use App\Src\Auth\Infrastructure\Repository\JWTAuthRepository;
+use Illuminate\Http\Request;
 
-class Login extends Controller
+class Logout extends Controller
 {
     private $jwtAuthRepository;
     public function __construct()
     {
         $this->jwtAuthRepository = new JWTAuthRepository();
     }
-    public function __invoke(LoginRequest $request)
+    public function __invoke()
     {
-        return (new LoginCommand($this->jwtAuthRepository))->execute($request->email, $request->password);
+        return (new LogoutCommand($this->jwtAuthRepository))->execute();
     }
 }
