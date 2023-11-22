@@ -14,16 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix("")->middleware(['web'])->group(function(){
-    Route::get("languages",App\Http\Controllers\Languages\Show::class);
-    Route::post("languages/{lang}",App\Http\Controllers\Languages\Change::class);
-    Route::post("login",App\Http\Controllers\Auth\Login::class);
+// Auth endpoints
+Route::prefix("")->middleware(['web'])->group(function () {
+    Route::post("login", App\Http\Controllers\Auth\Login::class);
+    Route::post("registration", App\Http\Controllers\Auth\Registration::class);
     // Protected routes
-    Route::middleware(["api"])->group(function(){
-        Route::post("logout",App\Http\Controllers\Auth\Logout::class);
+    Route::middleware(["auth:api"])->group(function () {
+        Route::post("logout", App\Http\Controllers\Auth\Logout::class);
+        Route::get("me", App\Http\Controllers\Auth\Me::class);
     });
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Languages endpoints
+Route::prefix("languages")->middleware(['web'])->group(function () {
+    Route::get("", App\Http\Controllers\Languages\Show::class);
+    Route::post("{lang}", App\Http\Controllers\Languages\Change::class);
 });
