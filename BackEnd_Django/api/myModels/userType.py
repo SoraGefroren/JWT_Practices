@@ -5,6 +5,9 @@ class UserType(models.Model):
     strUserType = models.CharField(max_length=255)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'tblUserType'
 
     def __str__(self):
         return self.strUserType

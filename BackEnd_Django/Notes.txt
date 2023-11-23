@@ -23,7 +23,10 @@ START DJANGO
 > python manage.py runserver
 > python manage.py runserver 127.0.0.1:9000
 
+python manage.py makemigrations myAplicacion
 python manage.py makemigrations
 python manage.py migrate
-python manage.py seed_data
+
+SEEDER AS NEW COMMAND: IN FOLDER//myAplicacion/management/commands/seed_data.py
+> python manage.py seed_data
 
