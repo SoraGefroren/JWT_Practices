@@ -28,9 +28,27 @@ Each migration and seed was developed to evaluate whether or not the resource ex
     - npm install
     - npm run build
 
-## Updating code after pull main branch
+## Updating code after git pull code from repository
 - If you are using Windows, go to Backend_Laravel root directory and execute **bin\update.bat** command, this will install all composer and npm dependencies, run migrations and seeders and transpile vite settings.
 - If you are using Linux/Mac, go to Backend_Laravel root directory and execute **bin\update.sh** command, this will install all composer and npm dependencies, run migrations and seeders and transpile vite settings.
+
+## JWT requests lifecycle
+![JWT request lifecycle](docs/schemas/JWTRequestLifecycle.png)
+1. JWT is requested by user via client app sending username and password
+2. Client app start authentication request
+3. Start authentication request:
+    - If authentication fail return error response
+    - If authentication success return JWT token
+4. Return response to client:
+    - If authentication fail show error response to user
+    - If authentication success user get user data and JWT token to be used in protected request
+5. User add Authorization Bearer token header, Content-Type and Accept application/json headers to protected request.
+6. Client app send the protected request with required headers.
+7. Rest API server return response
+8. Client get the Rest API response
+
+## Rest API documentation
+Rest API documentation is available on my postman workspaces and you can find practice requests in [https://documenter.getpostman.com/view/2915198/2s9YeBdtJK](https://documenter.getpostman.com/view/2915198/2s9YeBdtJK)
 
 ## Credits
 
