@@ -5,6 +5,7 @@ DEPENDENCIAS
 > pip install python-dotenv
 > pip install mysqlclient
 > pip install coreapi
+> pip install bcrypt
 
 
 INICIALIZACIÓN
@@ -24,3 +25,5 @@ START DJANGO
 
 python manage.py makemigrations
 python manage.py migrate
+python manage.py seed_data
+
