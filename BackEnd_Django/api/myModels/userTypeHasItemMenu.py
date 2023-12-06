@@ -3,7 +3,7 @@ from .userType import UserType
 from .itemMenu import ItemMenu
 
 class UserTypeHasItemMenu(models.Model):
-    ideUserTypeHasItemMenu = models.AutoField(primary_key=True)
+    ideUserTypeHasItemMenu = models.CharField(primary_key=True, max_length=255)
     ideUserType = models.ForeignKey(UserType, on_delete=models.CASCADE)
     ideItemMenu = models.ForeignKey(ItemMenu, on_delete=models.CASCADE)
     timeStamp = models.DateTimeField(auto_now_add=True)

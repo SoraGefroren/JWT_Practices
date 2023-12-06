@@ -30,7 +30,7 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       }
-    ];    
+    ];
     for (let dataItemMenu of aryItemsMenu) {
       let oneItemMenu = await ItemMenu.findOne({
         where: {

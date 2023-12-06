@@ -6,4 +6,6 @@ from .myModels.language import Language
 from .myModels.itemMenu import ItemMenu
 from .myModels.userType import UserType
 from .myModels.user import User
+from .myModels.logError import LogError
+from .myModels.logAccess import LogAccess
 from .myModels.userTypeHasItemMenu import UserTypeHasItemMenu
