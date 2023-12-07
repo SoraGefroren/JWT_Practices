@@ -48,10 +48,10 @@ def getTokenUser(token, req):
 def protectRoute (req, res, next):
     return None
 
-def renewAccessToken (req, res):
+def renewAccessToken (req):
     return None
 
-def verifyRefreshToken (req, res):
+def verifyRefreshToken (req):
     refreshToken = req.POST.get('refreshToken', None)
     
     if not refreshToken or not verifyToken(refreshToken):

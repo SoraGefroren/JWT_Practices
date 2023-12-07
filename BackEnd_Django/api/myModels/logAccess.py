@@ -14,3 +14,12 @@ class LogAccess(models.Model):
     
     def __str__(self):
         return self.ideLogAccess
+    
+    def isBlocked (pIP, pEmail):
+        return False
+    
+    def setBlocked (pIP, pEmail):
+        return True
+    
+    def registerAccess(pA, pIP, pEmail):
+        return False

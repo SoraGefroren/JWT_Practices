@@ -8,6 +8,7 @@ DEPENDENCIAS
 > pip install bcrypt
 
 
+
 INICIALIZACIÓN
 > python -m django startproject myProject   // En nueva carpeta
 > python -m django startproject myProject . // En carpeta raiz
