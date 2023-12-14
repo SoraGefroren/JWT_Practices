@@ -6,10 +6,8 @@ import json
 import bcrypt
 from django.utils import timezone
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from ..myUtils.utilAuth import generateAccessToken, generateRefreshToken, renewAccessToken, verifyRefreshToken
+from ..myUtils.utilAuth import generateAccessToken, generateRefreshToken, renewAccessToken as rwAccessToken, verifyRefreshToken as vfyRefreshToken
 
-@csrf_exempt
 def login(request, *args, **kwargs):
     ipAddress = request.META.get('REMOTE_ADDR')
     extLanguage = ''
@@ -61,9 +59,14 @@ def login(request, *args, **kwargs):
         # Registrar acceso
         LogAccess.registerAccess(True, ipAddress, username)
         # Generar tokens JWT y enviarlos como respuesta
-        accessToken = generateAccessToken(user.ideUser)
         refreshToken = generateRefreshToken(user.ideUser)
-        userLanguage = user.strDefaultLanguage or extLanguage
+        accessToken = generateAccessToken(user.ideUser)
+        userLanguage = ''
+        if user.strDefaultLanguage:
+            userLanguage = user.strDefaultLanguage.ideLanguage or extLanguage
+        else:
+            userLanguage = extLanguage
+        # Respuesta
         return JsonResponse({
             'accessToken': accessToken,
             'refreshToken': refreshToken,
@@ -82,7 +85,7 @@ def login(request, *args, **kwargs):
         return JsonResponse({'error': request.translate(request, 'internalServerError', extLanguage)}, status=500)
 
 def renewAccessToken(request, *args, **kwargs):
-    return renewAccessToken(request)
+    return rwAccessToken(request)
 
 def verifyRefreshToken(request, *args, **kwargs):
-    return verifyRefreshToken(request)
+    return vfyRefreshToken(request)

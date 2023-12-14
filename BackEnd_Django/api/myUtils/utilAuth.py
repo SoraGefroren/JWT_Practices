@@ -1,32 +1,49 @@
 import os
+import jwt
 from pathlib import Path
 from dotenv import load_dotenv
+from django.conf import settings
 from django.http import JsonResponse
-from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-from django.http import JsonResponse
+from datetime import datetime, timedelta
+from rest_framework.response import Response
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from ..myModels.user import User
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ENV_FILE = os.path.join(BASE_DIR, '.env')  # Cambia la ruta según la ubicación real del archivo .env
 
-def generateAccessToken (userId):
-    user = get_user_model().objects.get(id=userId)
-    access_token = AccessToken.for_user(user)
-    return str(access_token)
+def generateAccessToken(userId):
+    user = User.objects.get(ideUser=userId)
+    payload = {
+        'exp': datetime.utcnow() + timedelta(minutes=50),
+        'iat': datetime.utcnow(),
+        'id': user.ideUser,
+    }
+    return str(jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256').decode('utf-8'))
 
-def generateRefreshToken (userId):
-    user = get_user_model().objects.get(id=userId)
-    refresh_token = RefreshToken.for_user(user)
-    return str(refresh_token)
+def generateRefreshToken(userId):
+    user = User.objects.get(ideUser=userId)
+    payload = {
+        'exp': datetime.utcnow() + timedelta(minutes=50),
+        'iat': datetime.utcnow(),
+        'id': user.ideUser,
+    }
+    return str(jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256').decode('utf-8'))
 
-def verifyToken (token):
+def verifyToken(token):
     try:
-        AccessToken(token)
-        return True
-    except Exception:
-        return False
+        # Verificar el token y decodificar la información del usuario
+        decode = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        return {
+            'userId': decode.get('id'),
+        }
+    except ExpiredSignatureError:
+        return None
+    except InvalidTokenError:
+        return None
+    except:
+        return None
 
 def getTokenUser(token, req):
     user = None
@@ -38,15 +55,12 @@ def getTokenUser(token, req):
     decoded = verifyToken(token)
     if (not decoded):
         return {'user': user, 'tagLanguage': tagLanguage}
-    user = User.objects.get(pk=decoded['userId'])
+    user = User.objects.get(ideUser=decoded['userId'])
     if (not user):
         return {'user': user, 'tagLanguage': tagLanguage}
     else:
         tagLanguage = user.strDefaultLanguage or tagLanguage
     return {'user': user, 'tagLanguage': tagLanguage}
-
-def protectRoute (req, res, next):
-    return None
 
 def renewAccessToken (req):
     return None
@@ -57,13 +71,32 @@ def verifyRefreshToken (req):
     if not refreshToken or not verifyToken(refreshToken):
         return JsonResponse({'message': 'Invalid token'}, status=401)
     
-    decoded = RefreshToken(refreshToken).payload
-    
+    # decoded = RefreshToken(refreshToken).payload
+    decoded = False
     if not decoded or decoded['type'] != 'refresh':
         return JsonResponse({'message': 'Invalid token'}, status=401)
     
-    User = get_user_model()
-    user = User.objects.filter(id=decoded['user_id']).first()
+    user = User.objects.filter(ideUser=decoded['userId']).first()
     
     if not user:
         return JsonResponse({'message': req.translate('invalidUser')}, status=401)
+
+def protectRoute(view_func):
+    def wrapped(request, *args, **kwargs):
+        token = request.headers.get('Authorization', '')
+        if not token or not token.strip() or not token.startswith('Bearer '):
+            return JsonResponse({'message': request.translate('tokenNotProvided')}, status=401)
+        try:
+            decoded = verifyToken(token.split(' ')[1])
+            if not decoded:
+                return JsonResponse({'message': request.translate('invalidToken')}, status=401)
+        except jwt.ExpiredSignatureError:
+            return JsonResponse({'message': request.translate('invalidToken')}, status=401)
+        except jwt.InvalidTokenError:
+            return JsonResponse({'message': request.translate('invalidToken')}, status=401)
+        except:
+            return JsonResponse({'message': request.translate('invalidToken')}, status=401)
+        
+        return view_func(request, *args, **kwargs)
+
+    return wrapped

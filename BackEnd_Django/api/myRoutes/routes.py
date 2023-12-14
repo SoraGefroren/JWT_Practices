@@ -1,5 +1,6 @@
 from django.urls import path
 from ..myViewers import viewFree, viewAuth
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 urlpatterns = [
@@ -8,11 +9,11 @@ urlpatterns = [
     path('translations', viewFree.translations, name='translations'),
     path('translations/<str:language>', viewFree.translations, name='languages'),
     # Ruta pára iniciar sesión y obtener un accessToken
-    path('login', require_POST(viewAuth.login), name='login'),
+    path('login', csrf_exempt(require_POST(viewAuth.login)), name='login'),
     # Ruta para proteger y renovar el accessToken utilizando el refreshToken
-    path('refresh', require_POST(viewAuth.renewAccessToken), name='refresh'),
+    path('refresh', csrf_exempt(require_POST(viewAuth.renewAccessToken)), name='refresh'),
     # Ruta para validar el refreshToken
-    path('verify-refresh', require_POST(viewAuth.verifyRefreshToken), name='verify-refresh'),
+    path('verify-refresh', csrf_exempt(require_POST(viewAuth.verifyRefreshToken)), name='verify-refresh'),
 ]
 
 

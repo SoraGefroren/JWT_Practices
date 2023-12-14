@@ -22,6 +22,6 @@ Including another URLconf
 urlpatterns = [
     path('', include('api.myRoutes.routes')),
     path('api/', include('api.myRoutes.authRoutes')),
-    path('admin/', admin.site.urls),
-    path('docs/', include_docs_urls(title='Documentation'))
+    path('docs/', include_docs_urls(title='Documentation')),
+    path('admin/', admin.site.urls)
 ]

@@ -1,13 +1,11 @@
 DEPENDENCIAS
 > pip install Django
-> pip install djangorestframework
 > pip install djangorestframework-simplejwt
 > pip install python-dotenv
 > pip install mysqlclient
 > pip install coreapi
 > pip install bcrypt
-
-
+> pip install PyJWT
 
 INICIALIZACIÓN
 > python -m django startproject myProject   // En nueva carpeta
