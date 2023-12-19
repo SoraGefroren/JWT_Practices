@@ -28,12 +28,21 @@ load_dotenv(ENV_FILE)
 SECRET_KEY = 'django-insecure-0g%42l#z8n=4_ra^dd!86p%@9-3kxx8296#svq_6x)3!*&$h9u'
 CSRF_USE_SESSIONS = True
 
+# Permitir origenes
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1'
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1'
 ]
 
 INSTALLED_APPS = [
@@ -43,11 +52,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'api'
 ]
 
 MIDDLEWARE = [
     'api.myUtils.utilKeeper.MyMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,6 +69,25 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'myBackEnd.urls'
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+]
 
 TEMPLATES = [
     {

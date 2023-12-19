@@ -1,6 +1,7 @@
 DEPENDENCIAS
 > pip install Django
 > pip install djangorestframework-simplejwt
+> pip install django-cors-headers
 > pip install python-dotenv
 > pip install mysqlclient
 > pip install coreapi

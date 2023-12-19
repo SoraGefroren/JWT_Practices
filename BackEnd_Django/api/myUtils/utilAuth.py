@@ -1,5 +1,7 @@
 import os
 import jwt
+import time
+import json
 from pathlib import Path
 from dotenv import load_dotenv
 from django.conf import settings
@@ -16,7 +18,7 @@ ENV_FILE = os.path.join(BASE_DIR, '.env')  # Cambia la ruta según la ubicación
 def generateAccessToken(userId):
     user = User.objects.get(ideUser=userId)
     payload = {
-        'exp': datetime.utcnow() + timedelta(minutes=50),
+        'exp': datetime.utcnow() + timedelta(minutes=15),
         'iat': datetime.utcnow(),
         'id': user.ideUser,
     }
@@ -25,7 +27,7 @@ def generateAccessToken(userId):
 def generateRefreshToken(userId):
     user = User.objects.get(ideUser=userId)
     payload = {
-        'exp': datetime.utcnow() + timedelta(minutes=50),
+        'exp': datetime.utcnow() + timedelta(minutes=30),
         'iat': datetime.utcnow(),
         'id': user.ideUser,
     }
@@ -37,11 +39,8 @@ def verifyToken(token):
         decode = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
         return {
             'userId': decode.get('id'),
+            'exp': decode.get('exp')
         }
-    except ExpiredSignatureError:
-        return None
-    except InvalidTokenError:
-        return None
     except:
         return None
 
@@ -55,31 +54,17 @@ def getTokenUser(token, req):
     decoded = verifyToken(token)
     if (not decoded):
         return {'user': user, 'tagLanguage': tagLanguage}
-    user = User.objects.get(ideUser=decoded['userId'])
+    user = None
+    try:
+        user = User.objects.get(ideUser=decoded['userId'])
+    except User.DoesNotExist:
+        user = None
     if (not user):
         return {'user': user, 'tagLanguage': tagLanguage}
     else:
-        tagLanguage = user.strDefaultLanguage or tagLanguage
+        if user.strDefaultLanguage:
+            tagLanguage = user.strDefaultLanguage.ideLanguage
     return {'user': user, 'tagLanguage': tagLanguage}
-
-def renewAccessToken (req):
-    return None
-
-def verifyRefreshToken (req):
-    refreshToken = req.POST.get('refreshToken', None)
-    
-    if not refreshToken or not verifyToken(refreshToken):
-        return JsonResponse({'message': 'Invalid token'}, status=401)
-    
-    # decoded = RefreshToken(refreshToken).payload
-    decoded = False
-    if not decoded or decoded['type'] != 'refresh':
-        return JsonResponse({'message': 'Invalid token'}, status=401)
-    
-    user = User.objects.filter(ideUser=decoded['userId']).first()
-    
-    if not user:
-        return JsonResponse({'message': req.translate('invalidUser')}, status=401)
 
 def protectRoute(view_func):
     def wrapped(request, *args, **kwargs):
@@ -90,13 +75,66 @@ def protectRoute(view_func):
             decoded = verifyToken(token.split(' ')[1])
             if not decoded:
                 return JsonResponse({'message': request.translate('invalidToken')}, status=401)
-        except jwt.ExpiredSignatureError:
-            return JsonResponse({'message': request.translate('invalidToken')}, status=401)
-        except jwt.InvalidTokenError:
-            return JsonResponse({'message': request.translate('invalidToken')}, status=401)
+            else:
+                request.userId = decoded['userId']
         except:
             return JsonResponse({'message': request.translate('invalidToken')}, status=401)
-        
         return view_func(request, *args, **kwargs)
-
     return wrapped
+
+def renewAccessToken (request):
+    try:
+        # Tomar datos y buscar Usuario
+        data = json.loads(request.body.decode('utf-8'))
+        refreshToken = data.get('refreshToken', '').strip()
+        if not refreshToken:
+            return JsonResponse({'message': request.translate('tokenNotProvided')}, status=401)
+        decoded = verifyToken(refreshToken.split(' ')[1])
+        if not decoded:
+            return JsonResponse({'message': request.translate('invalidToken')}, status=401)
+        user = None
+        try:
+            user = User.objects.get(ideUser=decoded['userId'])
+        except User.DoesNotExist:
+            return JsonResponse({'message': request.translate('invalidUser')}, status=401)
+        try:
+            newRefreshToken = None
+            # Calcular vigencia del refreshToken en segundos
+            currentTimestamp = int(time.time())
+            # Tiempo restante en segundos
+            timeRemaining = decoded['exp'] - currentTimestamp
+            # Umbral de tiempo para renovar el refreshToken para 5 minutos en segundos
+            if timeRemaining <= (5 * 60):
+                # Si queda menos o igual tiempo del umbral, generar un nuevo refreshToken
+                newRefreshToken = generateRefreshToken(decoded['userId'])
+            # Emitir un nuevo accessToken
+            accessToken = generateAccessToken(decoded['userId'])
+            return JsonResponse({
+                'refreshToken': newRefreshToken,
+                'accessToken': accessToken,
+            })
+        except:
+            return JsonResponse({'message': request.translate('invalidToken')}, status=401)
+    except Exception as error:
+        return JsonResponse({'message': request.translate('tokenNotProvided')}, status=401)
+
+def verifyRefreshToken (request):
+    try:
+        # Tomar datos y buscar Usuario
+        data = json.loads(request.body.decode('utf-8'))
+        refreshToken = data.get('refreshToken', '').strip()
+        if not refreshToken:
+            return JsonResponse({'message': request.translate('tokenNotProvided')}, status=401)
+        decoded = verifyToken(refreshToken.split(' ')[1])
+        if not decoded:
+            return JsonResponse({'message': request.translate('invalidToken')}, status=401)
+        user = None
+        try:
+            user = User.objects.get(ideUser=decoded['userId'])
+        except User.DoesNotExist:
+            return JsonResponse({'message': request.translate('invalidUser')}, status=401)
+        return JsonResponse({
+            'message': request.translate('validToken')
+        })
+    except Exception as error:
+        return JsonResponse({'message': request.translate('invalidToken')}, status=401)
