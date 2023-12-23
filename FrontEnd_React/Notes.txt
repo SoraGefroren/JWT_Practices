@@ -1,0 +1,16 @@
+REACT START
+> npm init vite@latest my-react-app-name --template react
+|> npm install
+|> npm run dev
+
+COMPONENTS
+>
+
+DEPENDES
+> npm install bootstrap sass
+> npm install react-router-dom
+> npm install react-router
+> npm install jsonwebtoken
+> npm install jwt-decode
+> npm install axios
+
